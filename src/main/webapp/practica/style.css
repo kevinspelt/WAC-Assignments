@@ -1,0 +1,26 @@
+body {
+    background-color: #D7D5CD;
+}
+
+h1 {
+    background-color: #A0998D;
+    color: white;
+}
+
+label {
+    display: block;
+}
+
+table {
+    background-color: #A0998D;
+    width: 100%;
+}
+
+th {
+    text-align: left;
+}
+
+tbody tr:hover {
+    background-color: white;
+    cursor: pointer;
+}
