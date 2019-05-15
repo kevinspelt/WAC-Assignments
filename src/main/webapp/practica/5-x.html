@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="frame">
+
+    <h1>Mijn Locatie</h1>
+    <div id="myLocation">
+        <label id="country"></label>
+        <label id="country_code"></label>
+        <label id="region"></label>
+        <label id="city"></label>
+        <label id="postal"></label>
+        <label id="latitude"></label>
+        <label id="longitude"></label>
+        <label id="ip"></label>
+    </div>
+
+    <h1 id="weatherHeader"></h1>
+    <div id="weatherInfo">
+        <label id="main.temp"></label>
+        <label id="main.humidity"></label>
+        <label id="wind.speed"></label>
+        <label id="wind.deg"></label>
+        <label id="sys.sunrise"></label>
+        <label id="sys.sunset"></label>
+    </div>
+
+    <h1>Beschikbare vakantiebestemmingen</h1>
+    <div id="countryList">
+        <table id="countryTable">
+            <thead>
+                <th>Land</th>
+                <th>Hoofdstad</th>
+                <th>Regio</th>
+                <th>Oppervlakte</th>
+                <th>Inwoners</th>
+            </thead>
+
+            <tbody id="countries">
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function initPage() {
+        fetch("https://ipapi.co/json/")
+            .then(response => response.json())
+            .then(function (myJson) {
+                const myLocation = document.querySelector("#myLocation");
+                const locationLabels = myLocation.querySelectorAll("label");
+
+                for(let i = 0; i < locationLabels.length; i++) {
+                    let label = locationLabels[i];
+                    label.textContent = myJson[label.id];
+                }
+
+                myLocation.querySelector("#city").addEventListener("click", function () {
+                    showWeather(myJson.longitude, myJson.latitude, myJson.city);
+                });
+
+                showWeather(myJson.longitude, myJson.latitude, myJson.city);
+                loadCountries();
+            });
+    }
+
+    function showWeather(longitude, latitude, city) {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
+            .then(response => response.json())
+            .then(function (myJson) {
+                const weatherInfo = document.querySelector("#weatherInfo");
+                const weatherHeader = document.querySelector("#weatherHeader");
+                const weatherLabels = weatherInfo.querySelectorAll("label");
+
+                weatherHeader.textContent = "Het weer in " + city;
+
+                for(let i = 0; i < weatherLabels.length; i++) {
+                    let label = weatherLabels[i];
+                    let parts = label.id.split(".");
+                    label.textContent = myJson[parts[0]][parts[1]];
+                }
+            });
+    }
+
+    function loadCountries() {
+        fetch("http://localhost:1337/restservices/countries")
+            .then(response => response.json())
+            .then(function (myJson) {
+                const countryList = document.querySelector("#countryList");
+                const countryTable = countryList.querySelector("#countryTable");
+                const countryTBody = countryTable.querySelector("#countries");
+
+                for (const country of myJson) {
+                    const ph = document.createElement("tr");
+
+                    const land = document.createElement("td");
+                    const hoofdstad = document.createElement("td");
+                    const regio = document.createElement("td");
+                    const oppervlakte = document.createElement("td");
+                    const inwoners = document.createElement("td");
+
+                    land.appendChild(document.createTextNode(country.name));
+                    hoofdstad.appendChild(document.createTextNode(country.capital));
+                    regio.appendChild(document.createTextNode(country.region));
+                    oppervlakte.appendChild(document.createTextNode(country.surface));
+                    inwoners.appendChild(document.createTextNode(country.population));
+
+                    ph.appendChild(land);
+                    ph.appendChild(hoofdstad);
+                    ph.appendChild(regio);
+                    ph.appendChild(oppervlakte);
+                    ph.appendChild(inwoners);
+
+                    ph.addEventListener("click", function () {
+                        showWeather(country.lng, country.lat, country.capital);
+                    });
+                    countryTBody.appendChild(ph);
+                }
+            });
+    }
+    initPage();
+</script>
+
+</body>
+</html>
