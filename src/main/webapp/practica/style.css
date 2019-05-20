@@ -1,18 +1,27 @@
 body {
-    background-color: #D7D5CD;
+    background-color: darkseagreen;
+    font-family: "Segoe UI";
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
-    background-color: #A0998D;
-    color: white;
+    background-color: white;
+    color: black;
 }
 
 label {
     display: block;
 }
 
+p {
+    display: inline;
+}
+
 table {
-    background-color: #A0998D;
+    background-color: white;
+    border-spacing: 0;
+    color: black;
     width: 100%;
 }
 
@@ -20,7 +29,23 @@ th {
     text-align: left;
 }
 
-tbody tr:hover {
-    background-color: white;
+#countryList tbody tr:hover {
+    background-color: darkseagreen;
     cursor: pointer;
+}
+
+#myLocation td, #weatherInfo td {
+    width: 50%;
+}
+
+@media screen and (max-width: 650px){
+    #countryList table {
+        background-color: white;
+        border-spacing: 0;
+        color: black;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 100%;
+    }
 }

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta  charset="UTF-8" name="viewport" content="width-device-width, initial-scale=1.0">
     <title>Title</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.8.0/css/flag-icon.min.css">
 </head>
 <body>
 
@@ -11,35 +12,82 @@
 
     <h1>Mijn Locatie</h1>
     <div id="myLocation">
-        <label id="country"></label>
-        <label id="country_code"></label>
-        <label id="region"></label>
-        <label id="city"></label>
-        <label id="postal"></label>
-        <label id="latitude"></label>
-        <label id="longitude"></label>
-        <label id="ip"></label>
+        <table>
+            <tr>
+                <td>Country:</td>
+                <td class="dataIP" id="country_name"></td>
+            </tr>
+            <tr>
+                <td>Country Code:</td>
+                <td class="dataIP" id="country"></td>
+            </tr>
+            <tr>
+                <td>Region:</td>
+                <td class="dataIP" id="region"></td>
+            </tr>
+            <tr>
+                <td>City:</td>
+                <td class="dataIP" id="city"></td>
+            </tr>
+            <tr>
+                <td>Postal:</td>
+                <td class="dataIP" id="postal"></td>
+            </tr>
+            <tr>
+                <td>Latitude:</td>
+                <td class="dataIP" id="latitude"></td>
+            </tr>
+            <tr>
+                <td>Longitude:</td>
+                <td class="dataIP" id="longitude"></td>
+            </tr>
+            <tr>
+                <td>IP:</td>
+                <td class="dataIP" id="ip"></td>
+            </tr>
+        </table>
     </div>
 
     <h1 id="weatherHeader"></h1>
     <div id="weatherInfo">
-        <label id="main.temp"></label>
-        <label id="main.humidity"></label>
-        <label id="wind.speed"></label>
-        <label id="wind.deg"></label>
-        <label id="sys.sunrise"></label>
-        <label id="sys.sunset"></label>
+        <table>
+            <tr>
+                <td>Temperature:</td>
+                <td class="dataWeather" id="main.temp"></td>
+            </tr>
+            <tr>
+                <td>Humidity:</td>
+                <td class="dataWeather" id="main.humidity"></td>
+            </tr>
+            <tr>
+                <td>Wind Speed:</td>
+                <td class="dataWeather" id="wind.speed"></td>
+            </tr>
+            <tr>
+                <td>Wind Degree:</td>
+                <td class="dataWeather" id="wind.deg"></td>
+            </tr>
+            <tr>
+                <td>Sunrise:</td>
+                <td class="dataWeather" id="sys.sunrise"></td>
+            </tr>
+            <tr>
+                <td>Sunset:</td>
+                <td class="dataWeather" id="sys.sunset"></td>
+            </tr>
+        </table>
     </div>
 
     <h1>Beschikbare vakantiebestemmingen</h1>
     <div id="countryList">
         <table id="countryTable">
             <thead>
-                <th>Land</th>
-                <th>Hoofdstad</th>
-                <th>Regio</th>
-                <th>Oppervlakte</th>
-                <th>Inwoners</th>
+                <th>Flag</th>
+                <th>Country</th>
+                <th>Capital</th>
+                <th>Region</th>
+                <th>Surface</th>
+                <th>Population</th>
             </thead>
 
             <tbody id="countries">
@@ -55,17 +103,18 @@
         fetch("https://ipapi.co/json/")
             .then(response => response.json())
             .then(function (myJson) {
-                const myLocation = document.querySelector("#myLocation");
-                const locationLabels = myLocation.querySelectorAll("label");
+                const dataIP = document.querySelectorAll("td.dataIP");
 
-                for(let i = 0; i < locationLabels.length; i++) {
-                    let label = locationLabels[i];
-                    label.textContent = myJson[label.id];
+                for(let i = 0; i < dataIP.length; i++) {
+                    const td = dataIP[i];
+                    td.textContent = myJson[td.id];
+
+                    if(td.id === "city") {
+                        td.addEventListener("click", function () {
+                            showWeather(myJson.longitude, myJson.latitude, myJson.city);
+                        })
+                    }
                 }
-
-                myLocation.querySelector("#city").addEventListener("click", function () {
-                    showWeather(myJson.longitude, myJson.latitude, myJson.city);
-                });
 
                 showWeather(myJson.longitude, myJson.latitude, myJson.city);
                 loadCountries();
@@ -73,21 +122,44 @@
     }
 
     function showWeather(longitude, latitude, city) {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
-            .then(response => response.json())
-            .then(function (myJson) {
-                const weatherInfo = document.querySelector("#weatherInfo");
-                const weatherHeader = document.querySelector("#weatherHeader");
-                const weatherLabels = weatherInfo.querySelectorAll("label");
+        const dataWeather = document.querySelectorAll("td.dataWeather");
+        const weatherHeader = document.querySelector("#weatherHeader");
 
-                weatherHeader.textContent = "Het weer in " + city;
+        weatherHeader.textContent = "Het weer in " + city;
 
-                for(let i = 0; i < weatherLabels.length; i++) {
-                    let label = weatherLabels[i];
-                    let parts = label.id.split(".");
-                    label.textContent = myJson[parts[0]][parts[1]];
-                }
-            });
+        if(window.localStorage.getItem(city) === null) {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
+                .then(response => response.json())
+                .then(function (myJson) {
+                    for(let i = 0; i < dataWeather.length; i++) {
+                        const td = dataWeather[i];
+                        const parts = td.id.split(".");
+                        td.textContent = myJson[parts[0]][parts[1]];
+                    }
+                    myJson.timestamp = Date.now();
+                    window.localStorage.setItem(city, JSON.stringify(myJson));
+                });
+        } else if(Date.now() - window.localStorage.getItem(city).timestamp > 600) {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
+                .then(response => response.json())
+                .then(function (myJson) {
+                    for(let i = 0; i < dataWeather.length; i++) {
+                        const td = dataWeather[i];
+                        const parts = td.id.split(".");
+                        td.textContent = myJson[parts[0]][parts[1]];
+                    }
+                    myJson.timestamp = Date.now();
+                    window.localStorage.setItem(city, JSON.stringify(myJson));
+                });
+        } else {
+            const country = JSON.parse(window.localStorage.getItem(city));
+            for(let i = 0; i < dataWeather.length; i++) {
+                const td = dataWeather[i];
+                const parts = td.id.split(".");
+                console.log(country[parts[0]][parts[1]]);
+                td.textContent = country[parts[0]][parts[1]];
+            }
+        }
     }
 
     function loadCountries() {
@@ -101,11 +173,16 @@
                 for (const country of myJson) {
                     const ph = document.createElement("tr");
 
+                    const vlag = document.createElement("td");
                     const land = document.createElement("td");
                     const hoofdstad = document.createElement("td");
                     const regio = document.createElement("td");
                     const oppervlakte = document.createElement("td");
                     const inwoners = document.createElement("td");
+
+                    const span = vlag.appendChild(document.createElement("span"));
+                    span.setAttribute("id", "flag");
+                    span.setAttribute("class", "flag-icon flag-icon-" + country.code.toLowerCase());
 
                     land.appendChild(document.createTextNode(country.name));
                     hoofdstad.appendChild(document.createTextNode(country.capital));
@@ -113,6 +190,7 @@
                     oppervlakte.appendChild(document.createTextNode(country.surface));
                     inwoners.appendChild(document.createTextNode(country.population));
 
+                    ph.appendChild(vlag);
                     ph.appendChild(land);
                     ph.appendChild(hoofdstad);
                     ph.appendChild(regio);
@@ -122,6 +200,7 @@
                     ph.addEventListener("click", function () {
                         showWeather(country.lng, country.lat, country.capital);
                     });
+
                     countryTBody.appendChild(ph);
                 }
             });
