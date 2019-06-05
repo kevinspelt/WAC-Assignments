@@ -130,6 +130,7 @@ function loadCountries() {
         .catch(error => console.log(error.message));
 }
 
+
 function hideForm(formid) {
     const forms = document.querySelectorAll(".form");
     for(let x = 0; x < forms.length; x++) {
@@ -148,7 +149,16 @@ function saveAddForm() {
     const form = document.getElementById("addFormForm");
     const formdata = new FormData(form);
     const encData = new URLSearchParams(formdata.entries());
-    fetch("http://localhost:1337/restservices/countries/", {method: "POST", body: encData})
+
+    const fetchoptions = {
+        method: 'POST',
+        body: encData,
+        headers : {
+            'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken")
+        }
+    };
+
+    fetch("http://localhost:1337/restservices/countries/", fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -156,6 +166,8 @@ function saveAddForm() {
                 setTimeout(function () {
                     loadCountries()
                 }, 100);
+            } else if(status === 403) {
+                console.log("YOU NEED USER ROLE TO DO THIS");
             } else {
                 console.log(myJson.error);
             }
@@ -187,7 +199,16 @@ function saveEditForm() {
     const code = form["code"].value;
     const formData = new FormData(form);
     const encData = new URLSearchParams(formData.entries());
-    fetch("http://localhost:1337/restservices/countries/" + code, {method: "PUT", body: encData})
+
+    const fetchoptions = {
+        method: 'PUT',
+        body: encData,
+        headers : {
+            'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken")
+        }
+    };
+
+    fetch("http://localhost:1337/restservices/countries/" + code, fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -195,6 +216,8 @@ function saveEditForm() {
                 setTimeout(function () {
                     loadCountries()
                 }, 100);
+            } else if(status === 403) {
+                console.log("YOU NEED USER ROLE TO DO THIS");
             } else {
                 console.log(myJson.error);
             }
@@ -205,7 +228,15 @@ function saveEditForm() {
 function deleteForm() {
     const form = document.getElementById("deleteFormForm");
     const code = form["code"].value;
-    fetch("http://localhost:1337/restservices/countries/" + code, {method: "DELETE"})
+
+    const fetchoptions = {
+        method: 'DELETE',
+        headers : {
+            'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken")
+        }
+    };
+
+    fetch("http://localhost:1337/restservices/countries/" + code, fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -213,6 +244,8 @@ function deleteForm() {
                 setTimeout(function () {
                     loadCountries()
                 }, 100);
+            } else if(status === 403) {
+                console.log("YOU NEED USER ROLE TO DO THIS");
             } else {
                 console.log(myJson.error);
             }

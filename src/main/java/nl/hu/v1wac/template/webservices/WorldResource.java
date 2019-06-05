@@ -4,6 +4,7 @@ import nl.hu.v1wac.template.model.Country;
 import nl.hu.v1wac.template.model.ServiceProvider;
 import nl.hu.v1wac.template.model.WorldService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -44,6 +45,7 @@ public class WorldResource {
     }
 
     @POST
+    @RolesAllowed("user")
     @Produces("application/json")
     public Response addCountry(
             @FormParam("code") String code,
@@ -59,6 +61,7 @@ public class WorldResource {
 
     @PUT
     @Path("{code}")
+    @RolesAllowed("user")
     @Produces("application/json")
     public Response editCountryInfo(
             @PathParam("code") String code,
@@ -74,6 +77,7 @@ public class WorldResource {
 
     @DELETE
     @Path("{code}")
+    @RolesAllowed("user")
     @Produces("application/json")
     public Response deleteCountry(
             @PathParam("code") String code) {
