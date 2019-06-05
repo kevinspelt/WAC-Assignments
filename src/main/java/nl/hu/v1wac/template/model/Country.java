@@ -30,7 +30,20 @@ public class Country {
 		this.latitude = lat;
 		this.longitude = lng;
 	}
-	
+
+	public Country(String code, String name, String continent, String region, double surface, int population, String government, String capital) {
+		this.code = code;
+		this.name = name;
+		this.continent = continent;
+		this.region = region;
+		this.surface = surface;
+		this.population = population;
+		this.government = government;
+		this.capital = capital;
+	}
+
+	public Country() {}
+
 	public String getCode() {
 		return code;
 	}

@@ -4,81 +4,81 @@ import nl.hu.v1wac.template.model.Country;
 import nl.hu.v1wac.template.model.ServiceProvider;
 import nl.hu.v1wac.template.model.WorldService;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/countries")
 public class WorldResource {
-
-    //Creates the Object of country
-    public JsonObjectBuilder getCountryObjectBuilder(Country country) {
-        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder
-                .add("code", country.getCode())
-                .add("name", country.getName())
-                .add("capital", country.getCapital())
-                .add("continent", country.getContinent())
-                .add("iso3", country.getIso3())
-                .add("population", country.getPopulation())
-                .add("region", country.getRegion())
-                .add("surface", country.getSurface())
-                .add("government", country.getGovernment())
-                .add("lat", country.getLatitude())
-                .add("lng", country.getLongitude());
-        return jsonObjectBuilder;
-    }
+    WorldService worldService = ServiceProvider.getWorldService();
 
     @GET
     @Produces("application/json")
-    public String getCountries() {
-        WorldService worldService = ServiceProvider.getWorldService();
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for(Country country : worldService.getAllCountries()) {
-            jsonArrayBuilder.add(getCountryObjectBuilder(country));
-        }
-        return jsonArrayBuilder.build().toString();
+    public Response getCountries() {
+        List<Country> countries = worldService.getAllCountries();
+        return Response.ok(countries).build();
     }
 
     @GET
     @Path("{code}")
     @Produces("application/json")
-    public String getCountryInfo(@PathParam("code") String code) {
-        WorldService worldService = ServiceProvider.getWorldService();
-        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder = getCountryObjectBuilder(worldService.getCountryByCode(code));
-        return jsonObjectBuilder.build().toString();
+    public Response getCountryInfo(@PathParam("code") String code) {
+        Country country = worldService.getCountryByCode(code);
+        return Response.ok(country).build();
     }
 
     @GET
     @Path("/largestsurfaces")
     @Produces("application/json")
-    public String getLargestSurfaces() {
-        WorldService worldService = ServiceProvider.getWorldService();
-        List<Country> largestSurfaces = worldService.get10LargestSurfaces();
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for(Country country : largestSurfaces) {
-            jsonArrayBuilder.add(getCountryObjectBuilder(country));
-        }
-        return jsonArrayBuilder.build().toString();
+    public Response getLargestSurfaces() {
+        List<Country> countries = worldService.get10LargestSurfaces();
+        return Response.ok(countries).build();
     }
 
     @GET
     @Path("/largestpopulation")
     @Produces("application/json")
-    public String getLargestPopulation() {
-        WorldService worldService = ServiceProvider.getWorldService();
-        List<Country> largestPopulation = worldService.get10LargestPopulations();
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        for(Country country : largestPopulation) {
-            jsonArrayBuilder.add(getCountryObjectBuilder(country));
-        }
-        return jsonArrayBuilder.build().toString();
+    public Response getLargestPopulation() {
+        List<Country> countries = worldService.get10LargestPopulations();
+        return Response.ok(countries).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    public Response addCountry(
+            @FormParam("code") String code,
+            @FormParam("name") String name,
+            @FormParam("capital") String capital,
+            @FormParam("region") String region,
+            @FormParam("surface") int surface,
+            @FormParam("population") int population) {
+        Country country = new Country(code, name, "x", region, surface, population, "x", capital);
+        worldService.saveCountry(country);
+        return Response.ok(country).build();
+    }
+
+    @PUT
+    @Path("{code}")
+    @Produces("application/json")
+    public Response editCountryInfo(
+            @PathParam("code") String code,
+            @FormParam("name") String name,
+            @FormParam("capital") String capital,
+            @FormParam("region") String region,
+            @FormParam("surface") int surface,
+            @FormParam("population") int population) {
+        Country country = new Country(code, name, "x", region, surface, population, "x", capital);
+        worldService.updateCountry(country);
+        return Response.ok(country).build();
+    }
+
+    @DELETE
+    @Path("{code}")
+    @Produces("application/json")
+    public Response deleteCountry(
+            @PathParam("code") String code) {
+        Country country = worldService.getCountryByCode(code);
+        worldService.deleteCountry(country);
+        return Response.ok(country).build();
     }
 }

@@ -82,7 +82,12 @@
         <h1>Beschikbare vakantiebestemmingen</h1>
         <table id="countryTable">
             <thead>
-                <th>Flag</th>
+                <th>
+                    <button id="addButton" onclick="hideForm('addForm')">ADD</button>
+                    <button id="deleteButton" onclick="hideForm('deleteForm')">DELETE</button>
+                    <button id="editButton" onclick="hideForm('editForm')">EDIT</button>
+                </th>
+                <th>Country Code</th>
                 <th>Country</th>
                 <th>Capital</th>
                 <th>Region</th>
@@ -95,118 +100,91 @@
             </tbody>
         </table>
     </div>
+    
+    <div id="forms">
+        <div  id="addForm" class="form">
+            <form id="addFormForm">
+                <h1>Add form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code" id="addFormCountryCodeInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Country</p></td>
+                        <td><input type="text" name="name" id="addFormCountryInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Capital</p></td>
+                        <td><input type="text" name="capital" id="addFormCapitalInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Region</p></td>
+                        <td><input type="text" name="region" id="addFormRegionInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Surface</p></td>
+                        <td><input type="number" name="surface" id="addFormSurfaceInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Population</p></td>
+                        <td><input type="number" name="population" id="addFormPopulationInput"></td>
+                    </tr>
+                </table>
+                <input type="button" id="addSaveFormButton" value="ADD">
+            </form>
+        </div>
 
+        <div id="deleteForm" class="form">
+            <form id="deleteFormForm">
+                <h1>Delete Form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code"></td>
+                    </tr>
+                </table>
+                <input type="button" id="deleteFormButton" value="DELETE">
+            </form>
+        </div>
+
+        <div  id="editForm" class="form">
+            <form id="editFormForm">
+                <h1>Edit Form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code" id="editFormCountryCodeInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Country</p></td>
+                        <td><input type="text" name="name" id="editFormCountryInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Capital</p></td>
+                        <td><input type="text" name="capital" id="editFormCapitalInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Region</p></td>
+                        <td><input type="text" name="region" id="editFormRegionInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Surface</p></td>
+                        <td><input type="number" name="surface" id="editFormSurfaceInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Population</p></td>
+                        <td><input type="number" name="population" id="editFormPopulationInput"></td>
+                    </tr>
+                </table>
+                <input type="button" id="editFillFormButton" value="FILL">
+                <input type="button" id="editSaveFormButton" value="SAVE CHANGES">
+            </form>
+        </div>
+    </div>
 </div>
 
-<script>
-    function initPage() {
-        fetch("https://ipapi.co/json/")
-            .then(response => response.json())
-            .then(function (myJson) {
-                const dataIP = document.querySelectorAll("td.dataIP");
-
-                for(let i = 0; i < dataIP.length; i++) {
-                    const td = dataIP[i];
-                    td.textContent = myJson[td.id];
-
-                    if(td.id === "city") {
-                        td.addEventListener("click", function () {
-                            showWeather(myJson.longitude, myJson.latitude, myJson.city);
-                        })
-                    }
-                }
-
-                showWeather(myJson.longitude, myJson.latitude, myJson.city);
-                loadCountries();
-            });
-    }
-
-    function showWeather(longitude, latitude, city) {
-        const dataWeather = document.querySelectorAll("td.dataWeather");
-        const weatherHeader = document.querySelector("#weatherHeader");
-
-        weatherHeader.textContent = "Het weer in " + city;
-
-        if(window.localStorage.getItem(city) === null) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
-                .then(response => response.json())
-                .then(function (myJson) {
-                    for(let i = 0; i < dataWeather.length; i++) {
-                        const td = dataWeather[i];
-                        const parts = td.id.split(".");
-                        td.textContent = myJson[parts[0]][parts[1]];
-                    }
-                    myJson.timestamp = Date.now();
-                    window.localStorage.setItem(city, JSON.stringify(myJson));
-                });
-        } else if(Date.now() - window.localStorage.getItem(city).timestamp > 600) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&q=${city}&units=metric&appid=3b0d963e4598d465a0b3926b905c7cf1`)
-                .then(response => response.json())
-                .then(function (myJson) {
-                    for(let i = 0; i < dataWeather.length; i++) {
-                        const td = dataWeather[i];
-                        const parts = td.id.split(".");
-                        td.textContent = myJson[parts[0]][parts[1]];
-                    }
-                    myJson.timestamp = Date.now();
-                    window.localStorage.setItem(city, JSON.stringify(myJson));
-                });
-        } else {
-            const country = JSON.parse(window.localStorage.getItem(city));
-            for(let i = 0; i < dataWeather.length; i++) {
-                const td = dataWeather[i];
-                const parts = td.id.split(".");
-                console.log(country[parts[0]][parts[1]]);
-                td.textContent = country[parts[0]][parts[1]];
-            }
-        }
-    }
-
-    function loadCountries() {
-        fetch("http://localhost:1337/restservices/countries")
-            .then(response => response.json())
-            .then(function (myJson) {
-                const countryList = document.querySelector("#countryList");
-                const countryTable = countryList.querySelector("#countryTable");
-                const countryTBody = countryTable.querySelector("#countries");
-
-                for (const country of myJson) {
-                    const ph = document.createElement("tr");
-
-                    const vlag = document.createElement("td");
-                    const land = document.createElement("td");
-                    const hoofdstad = document.createElement("td");
-                    const regio = document.createElement("td");
-                    const oppervlakte = document.createElement("td");
-                    const inwoners = document.createElement("td");
-
-                    const span = vlag.appendChild(document.createElement("span"));
-                    span.setAttribute("id", "flag");
-                    span.setAttribute("class", "flag-icon flag-icon-" + country.code.toLowerCase());
-
-                    land.appendChild(document.createTextNode(country.name));
-                    hoofdstad.appendChild(document.createTextNode(country.capital));
-                    regio.appendChild(document.createTextNode(country.region));
-                    oppervlakte.appendChild(document.createTextNode(country.surface));
-                    inwoners.appendChild(document.createTextNode(country.population));
-
-                    ph.appendChild(vlag);
-                    ph.appendChild(land);
-                    ph.appendChild(hoofdstad);
-                    ph.appendChild(regio);
-                    ph.appendChild(oppervlakte);
-                    ph.appendChild(inwoners);
-
-                    ph.addEventListener("click", function () {
-                        showWeather(country.lng, country.lat, country.capital);
-                    });
-
-                    countryTBody.appendChild(ph);
-                }
-            });
-    }
-    initPage();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
