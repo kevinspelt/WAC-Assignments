@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta  charset="UTF-8" name="viewport" content="width-device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/2.8.0/css/flag-icon.min.css">
+</head>
+<body>
+
+<div id="frame">
+
+    <div id="myLocation" class="info">
+        <h1>Mijn Locatie</h1>
+        <table>
+            <tr>
+                <td>Country:</td>
+                <td class="dataIP" id="country_name"></td>
+            </tr>
+            <tr>
+                <td>Country Code:</td>
+                <td class="dataIP" id="country"></td>
+            </tr>
+            <tr>
+                <td>Region:</td>
+                <td class="dataIP" id="region"></td>
+            </tr>
+            <tr>
+                <td>City:</td>
+                <td class="dataIP" id="city"></td>
+            </tr>
+            <tr>
+                <td>Postal:</td>
+                <td class="dataIP" id="postal"></td>
+            </tr>
+            <tr>
+                <td>Latitude:</td>
+                <td class="dataIP" id="latitude"></td>
+            </tr>
+            <tr>
+                <td>Longitude:</td>
+                <td class="dataIP" id="longitude"></td>
+            </tr>
+            <tr>
+                <td>IP:</td>
+                <td class="dataIP" id="ip"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="weatherInfo" class="info">
+        <h1 id="weatherHeader"></h1>
+        <table>
+            <tr>
+                <td>Temperature:</td>
+                <td class="dataWeather" id="main.temp"></td>
+            </tr>
+            <tr>
+                <td>Humidity:</td>
+                <td class="dataWeather" id="main.humidity"></td>
+            </tr>
+            <tr>
+                <td>Wind Speed:</td>
+                <td class="dataWeather" id="wind.speed"></td>
+            </tr>
+            <tr>
+                <td>Wind Degree:</td>
+                <td class="dataWeather" id="wind.deg"></td>
+            </tr>
+            <tr>
+                <td>Sunrise:</td>
+                <td class="dataWeather" id="sys.sunrise"></td>
+            </tr>
+            <tr>
+                <td>Sunset:</td>
+                <td class="dataWeather" id="sys.sunset"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="countryList" class="data">
+        <h1>Beschikbare vakantiebestemmingen</h1>
+        <table id="countryTable">
+            <thead>
+                <th>
+                    <button id="addButton" onclick="hideForm('addForm')">ADD</button>
+                    <button id="deleteButton" onclick="hideForm('deleteForm')">DELETE</button>
+                    <button id="editButton" onclick="hideForm('editForm')">EDIT</button>
+                </th>
+                <th>Country Code</th>
+                <th>Country</th>
+                <th>Capital</th>
+                <th>Region</th>
+                <th>Surface</th>
+                <th>Population</th>
+            </thead>
+
+            <tbody id="countries">
+
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="forms">
+        <div  id="addForm" class="form">
+            <form id="addFormForm">
+                <h1>Add form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code" id="addFormCountryCodeInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Country</p></td>
+                        <td><input type="text" name="name" id="addFormCountryInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Capital</p></td>
+                        <td><input type="text" name="capital" id="addFormCapitalInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Region</p></td>
+                        <td><input type="text" name="region" id="addFormRegionInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Surface</p></td>
+                        <td><input type="number" name="surface" id="addFormSurfaceInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Population</p></td>
+                        <td><input type="number" name="population" id="addFormPopulationInput"></td>
+                    </tr>
+                </table>
+                <input type="button" id="addSaveFormButton" value="ADD">
+            </form>
+        </div>
+
+        <div id="deleteForm" class="form">
+            <form id="deleteFormForm">
+                <h1>Delete Form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code"></td>
+                    </tr>
+                </table>
+                <input type="button" id="deleteFormButton" value="DELETE">
+            </form>
+        </div>
+
+        <div  id="editForm" class="form">
+            <form id="editFormForm">
+                <h1>Edit Form</h1>
+                <table>
+                    <tr>
+                        <td><p>Country Code</p></td>
+                        <td><input type="text" name="code" id="editFormCountryCodeInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Country</p></td>
+                        <td><input type="text" name="name" id="editFormCountryInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Capital</p></td>
+                        <td><input type="text" name="capital" id="editFormCapitalInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Region</p></td>
+                        <td><input type="text" name="region" id="editFormRegionInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Surface</p></td>
+                        <td><input type="number" name="surface" id="editFormSurfaceInput"></td>
+                    </tr>
+                    <tr>
+                        <td><p>Population</p></td>
+                        <td><input type="number" name="population" id="editFormPopulationInput"></td>
+                    </tr>
+                </table>
+                <input type="button" id="editFillFormButton" value="FILL">
+                <input type="button" id="editSaveFormButton" value="SAVE CHANGES">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
