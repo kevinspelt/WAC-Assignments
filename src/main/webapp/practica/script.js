@@ -75,7 +75,7 @@ function showWeather(longitude, latitude, city) {
 }
 
 function loadCountries() {
-    fetch("http://localhost:1337/restservices/countries", {method: "GET"})
+    fetch("/restservices/countries", {method: "GET"})
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if(status === 200) {
