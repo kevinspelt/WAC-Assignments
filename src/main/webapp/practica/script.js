@@ -158,7 +158,7 @@ function saveAddForm() {
         }
     };
 
-    fetch("http://localhost:1337/restservices/countries/", fetchoptions)
+    fetch("/restservices/countries/", fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -178,7 +178,7 @@ function saveAddForm() {
 function fillEditForm() {
     const form = document.getElementById("editFormForm");
     const code = form["code"].value;
-    fetch("http://localhost:1337/restservices/countries/" + code, {method: "GET"})
+    fetch("/restservices/countries/" + code, {method: "GET"})
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -208,7 +208,7 @@ function saveEditForm() {
         }
     };
 
-    fetch("http://localhost:1337/restservices/countries/" + code, fetchoptions)
+    fetch("/restservices/countries/" + code, fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
@@ -236,7 +236,7 @@ function deleteForm() {
         }
     };
 
-    fetch("http://localhost:1337/restservices/countries/" + code, fetchoptions)
+    fetch("/restservices/countries/" + code, fetchoptions)
         .then(response => Promise.all([response.status, response.json()]))
         .then(function ([status, myJson]) {
             if (status === 200) {
