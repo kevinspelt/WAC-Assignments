@@ -1,6 +1,14 @@
 C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\model\ServiceProvider.java
 C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\webservices\WorldResource.java
-C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\model\Country.java
 C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\model\WorldService.java
 C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\servlets\CalculatorServlet.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\webservices\AuthenticationResource.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\persistence\CountryDao.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\persistence\UserDao.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\webservices\AuthenticationFilter.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\persistence\PostgresBaseDao.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\persistence\CountryPostgresDaoImpl.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\model\Country.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\persistence\UserPostgresDaoImpl.java
+C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\webservices\MySecurityContext.java
 C:\Users\Lenovo\OneDrive\Mijn Documenten\HBO - ICT\1e JAAR\WAC\Tomcat\WAC-3-x\template\src\main\java\nl\hu\v1wac\template\servlets\DynamicServlet.java
